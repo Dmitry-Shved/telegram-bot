@@ -1,4 +1,5 @@
 import logging
+import random
 from telegram import ForceReply, Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 
@@ -21,9 +22,19 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     )
 
 
+async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text("Чтоб узнать насколько ты nicita55, введи команду /nicita55")
+
+
+async def generate_nicita55(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text(rf"ты на {random.randint(1,100)}% nicita55")
+
+
 def main() -> None:
     application = Application.builder().token(TOKEN).build()
     application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("nicita55", generate_nicita55))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 
